@@ -2,24 +2,7 @@
 
 import Image from "next/image";
 import { useMemo, useState } from "react";
-import projectData from "../data/projects.json";
-
-type ProjectRecord = {
-  id: string;
-  name: string;
-  description: string;
-  tech: string[];
-  featured: boolean;
-};
-
-type ViewMode = "all" | "featured";
-
-const PROJECTS: ProjectRecord[] = projectData.projects;
-
-const PROJECT_IMAGES: Record<string, string> = {
-  "1": "/projects/portfolio-site.svg",
-  "2": "/projects/api-server.svg",
-};
+import { PROJECTS, filterProjects, imageFor, pickSelected, type ViewMode } from "@/lib/projects";
 
 const MCP_TOOLS = [
   { name: "get_all", description: "Return the complete project index." },
@@ -33,18 +16,8 @@ export default function Home() {
   const [query, setQuery] = useState("");
   const [copyState, setCopyState] = useState("COPY ENDPOINT");
 
-  const filteredProjects = useMemo(() => {
-    const normalizedQuery = query.trim().toLowerCase();
-    return PROJECTS.filter((project) => {
-      const matchesView = viewMode === "all" || project.featured;
-      const matchesQuery =
-        normalizedQuery.length === 0 ||
-        `${project.name} ${project.description} ${project.tech.join(" ")}`.toLowerCase().includes(normalizedQuery);
-      return matchesView && matchesQuery;
-    });
-  }, [query, viewMode]);
-
-  const selectedProject = PROJECTS.find((project) => project.id === selectedId) ?? PROJECTS[0];
+  const filteredProjects = useMemo(() => filterProjects(PROJECTS, viewMode, query), [query, viewMode]);
+  const selectedProject = pickSelected(filteredProjects, selectedId);
 
   function selectProject(id: string) {
     setSelectedId(id);
@@ -53,10 +26,6 @@ export default function Home() {
 
   function selectView(nextView: ViewMode) {
     setViewMode(nextView);
-    if (nextView === "featured") {
-      const firstFeatured = PROJECTS.find((project) => project.featured);
-      if (firstFeatured) setSelectedId(firstFeatured.id);
-    }
   }
 
   async function copyEndpoint() {
@@ -152,7 +121,7 @@ export default function Home() {
               </div>
               <div className="study-panel__image">
                 <Image
-                  src={PROJECT_IMAGES[selectedProject.id] ?? "/projects/portfolio-site.svg"}
+                  src={imageFor(selectedProject.id)}
                   alt={`${selectedProject.name} visual study`}
                   fill
                   unoptimized
