@@ -1,47 +1,36 @@
 # Projects Showcase
 
-A quiet, honest index of project studies in the Book Dev boundary. The surface
-uses an ikebana-inspired arrangement: choose a stem to focus a study, search
-the records, or open the read-only MCP catalog.
+Two sample project records shown as a quiet arrangement: select one to open its study, search, or show only the featured one. Placeholder data only.
 
-The project index is sourced from `data/projects.json`.
+Live: https://projects-showcase.bookchaowalit.com (deployed by Vercel CLI; it can lag `main`, see `PRODUCT.md`).
 
-## Getting Started
+## What it does not do
 
-First, run the development server:
+- No editing, uploads, themes or real project list; the two records are placeholders.
+
+## Run
 
 ```bash
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Checks
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm test           # Vitest: filter and selection rules, MCP route, home page render, Sentry scrubbing
+npm run lint
+npm run typecheck
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+CI (`.github/workflows/ci.yml`) runs the shared Node workflow (with a line-coverage gate) and the shared security
+scan on every push and PR to `main`.
 
-## Learn More
+## Code map
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-## Related
-
-- **Mobile App:** [bookchaowalit-projects-showcase-mobile](https://github.com/bookchaowalit-mobile/bookchaowalit-projects-showcase-mobile)
-- **Portfolio:** [bookchaowalit.com](https://bookchaowalit.com)
+- `data/projects.json`: the two sample records.
+- `lib/projects.ts`: records, images, `filterProjects`, `pickSelected` and `findProject` (used by the page and the MCP route).
+- `app/api/mcp/route.ts`: stateless JSON-RPC endpoint with `get_all`, `get_by_id` and `search`, plus a GET catalog.
+- `lib/sentry.ts` + `instrumentation*.ts`: error reporting to Sentry, errors only, personal data stripped; off when `NEXT_PUBLIC_SENTRY_DSN` is unset.
+- `app/more-projects/page.tsx`: shared portfolio link page (copied per repository, not a package).
