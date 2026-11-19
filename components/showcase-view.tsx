@@ -47,7 +47,7 @@ export function ShowcaseView({ projects, query, view }: { projects: ProjectRecor
         <ResultCount shown={shown.length} total={projects.length} noun="sample record" query={query || undefined} filter={view === "featured" ? "Featured" : undefined} />
 
         {shown.length ? (
-          <ul className="rs-list" data-layout="cards">
+          <ul className="rs-list" role="list" data-layout="cards">
             {shown.map((project) => (
               <li key={project.id}>
                 <article className="rs-entry">
