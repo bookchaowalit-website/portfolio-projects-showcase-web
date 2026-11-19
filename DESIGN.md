@@ -1,20 +1,14 @@
-# Design direction
+# Projects Showcase design
 
-## Product world
+Since 2026-11-19 the page uses the shared **Reader shell** (`app/reader-shell.css`, `components/reader-shell.tsx`,
+rules in `READER.md`): Geist and Geist Mono via next/font, the `--rs-*` light/dark tokens (placeholders use
+`--rs-muted`, 4.5:1), one top bar and a footer back to bookchaowalit.com. The old ikebana palette and the
+absolutely positioned stems are gone, so any number of records lays out as a card grid.
 
-Projects Showcase is an ikebana-inspired arrangement: project records become stems in a deliberately open vessel, and the selected study is the bloom that receives attention. The composition keeps the index human and quiet while preserving a read-only catalog handle for agents.
-
-## Visual system
-
-- Palette: plaster `#ece9df`, soft white `#f7f5ef`, ink `#242720`, pine `#566052`, iris `#4f769c`, and bronze `#8d6d4f`.
-- Type: the established Geist sans/mono pairing supports a restrained editorial label system.
-- Composition: sparse navigation, large quiet hero, open arrangement alcove, selected study panel, archive controls, and MCP tool index.
-- Motion: selecting a stem brings the study into focus with a short scroll; native focus outlines remain visible.
-
-## Interaction and boundary
-
-Visitors can select studies, search project data, switch all/featured views, and copy or open the read-only MCP endpoint. Records are sourced from local `data/projects.json`; the page does not claim project execution, SaaS availability, or write access through MCP.
-
-## Responsive behavior
-
-The arrangement and selected study stack into one reading path on mobile. Search, view controls, and the catalog handle remain reachable without horizontal overflow.
+- Head: says what the page is (an index rendered from `data/projects.json`), that the two records are samples,
+  and links to the real project list on bookchaowalit.com.
+- Toolbar: GET search and All / Featured chips with counts that follow the search; a count line; an empty state
+  with a way back.
+- Records: one card each (featured or supporting, description, technologies).
+- MCP: the three read-only tools of `/api/mcp` and a 44px Copy endpoint URL button with a status message.
+- Floor: text ≥ 12px, targets ≥ 44px, 4.5:1 text in light and dark, forced colors, no horizontal scroll at 320px.

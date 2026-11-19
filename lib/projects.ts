@@ -4,16 +4,12 @@ import projectData from "@/data/projects.json";
 export type ProjectRecord = { id: string; name: string; description: string; tech: string[]; featured: boolean };
 export type ViewMode = "all" | "featured";
 
-export const PROJECTS: ProjectRecord[] = projectData.projects;
-
-export const PROJECT_IMAGES: Record<string, string> = {
-  "1": "/projects/portfolio-site.svg",
-  "2": "/projects/api-server.svg",
-};
-
-export function imageFor(id: string): string {
-  return PROJECT_IMAGES[id] ?? "/projects/portfolio-site.svg";
+/** Reads ?view=; anything unknown means "all". */
+export function parseView(value: string | undefined): ViewMode {
+  return value === "featured" ? "featured" : "all";
 }
+
+export const PROJECTS: ProjectRecord[] = projectData.projects;
 
 /** Case-insensitive search over name, description and technologies, within the chosen view. */
 export function filterProjects(projects: ProjectRecord[], viewMode: ViewMode, query: string): ProjectRecord[] {
