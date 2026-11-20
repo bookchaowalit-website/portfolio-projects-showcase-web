@@ -39,3 +39,5 @@ A portfolio visitor who wants to see a calm way to present a few projects.
 - A technology label with no spaces that is wider than the card (e.g. a 40-character name at 320px) overflows the
   card, because `.rs-tag` in the shared Reader shell (`app/reader-shell.css`) has no max width or word break. The
   current records have no such label. Batched for a future shell change in content-techblog-web (Codex 2026-11-20).
+- "Show all records" in the empty state is a plain link to `/`: the search field can keep the edited text and focus is
+  not moved back to it.
