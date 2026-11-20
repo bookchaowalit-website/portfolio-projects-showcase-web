@@ -13,5 +13,6 @@ html { scroll-padding-top: 64px; }
 .sc-mcp code { padding: 1px 6px; border-radius: 6px; background: var(--rs-code-bg); color: var(--rs-code-fg); font-family: var(--rs-mono); font-size: .9em; }
 .rs-toolbar + .rs-count { margin-top: 16px; }
 .sc-copy-status { flex-basis: 100%; margin: 0; color: var(--rs-muted); font-size: 15px; overflow-wrap: anywhere; }
-.sc-copy-status:empty { display: none; }
+/* Empty: visually hidden but kept in the accessibility tree, so the live region exists before the first copy. */
+.sc-copy-status:empty { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .sc-copy-url { user-select: all; }

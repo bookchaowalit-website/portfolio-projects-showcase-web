@@ -28,3 +28,18 @@ describe("CopyEndpoint", () => {
     act(() => root.unmount());
   });
 });
+
+describe("MCP section", () => {
+  it("keeps the empty status in the accessibility tree (visually hidden, never display:none)", async () => {
+    const { readFileSync } = await import("node:fs");
+    const css = readFileSync("app/globals.css", "utf8");
+    const rule = css.match(/\.sc-copy-status:empty\s*\{([^}]*)\}/)?.[1] ?? "";
+    expect(rule).not.toMatch(/display:\s*none/);
+    expect(rule).toMatch(/clip-path/);
+  });
+
+  it("links straight to the catalog so it opens without JavaScript", async () => {
+    const { readFileSync } = await import("node:fs");
+    expect(readFileSync("components/showcase-view.tsx", "utf8")).toContain('href="/api/mcp"');
+  });
+});

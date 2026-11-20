@@ -71,7 +71,7 @@ export function ShowcaseView({ projects, query, view }: { projects: ProjectRecor
           <ul>
             {MCP_TOOLS.map((tool) => <li key={tool.name}><code>{tool.name}</code> — {tool.description}</li>)}
           </ul>
-          <div className="rs-actions"><CopyEndpoint /></div>
+          <div className="rs-actions"><a className="rs-plain" href="/api/mcp">Open the catalog (JSON)</a><CopyEndpoint /></div>
         </section>
       </main>
       <ReaderFoot source={SOURCE} note="A demo of a data-driven index. The records are samples, not client work." />
