@@ -33,3 +33,9 @@ A portfolio visitor who wants to see a calm way to present a few projects.
 ## Boundaries
 
 - Browser-only apart from the stateless, read-only `/api/mcp` route.
+
+## Known limits
+
+- A technology label with no spaces that is wider than the card (e.g. a 40-character name at 320px) overflows the
+  card, because `.rs-tag` in the shared Reader shell (`app/reader-shell.css`) has no max width or word break. The
+  current records have no such label. Batched for a future shell change in content-techblog-web (Codex 2026-11-20).

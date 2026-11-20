@@ -19,7 +19,12 @@ describe("CopyEndpoint", () => {
     expect(host.textContent).toContain("Copied");
     writeText.mockRejectedValueOnce(new Error("no"));
     await act(async () => { host.querySelector("button")!.click(); });
-    expect(host.querySelector("[role='status']")!.textContent).toContain("blocked");
+    const status = host.querySelector("[role='status']")!;
+    expect(status.textContent).toContain("blocked");
+    // Visible (not screen-reader-only) and offers the URL to copy by hand.
+    expect(status.classList.contains("rs-sr")).toBe(false);
+    expect(status.querySelector("code")?.textContent).toMatch(/^https?:\/\/[^/]+\/api\/mcp$/);
+    expect(host.querySelector("button")!.textContent).toBe("Copy endpoint URL");
     act(() => root.unmount());
   });
 });

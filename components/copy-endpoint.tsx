@@ -2,21 +2,29 @@
 
 import { useState } from "react";
 
-/** Copies this site's MCP endpoint URL; says so (or that the browser blocked it) in a status line. */
+/**
+ * Copies this site's MCP endpoint URL and says so in a visible status line (a live region that is rendered
+ * before the click). When the browser blocks the clipboard, the line says so and shows the URL as selectable
+ * text, so it can still be copied by hand.
+ */
 export function CopyEndpoint() {
-  const [state, setState] = useState<"idle" | "copied" | "failed">("idle");
+  const [state, setState] = useState<{ status: "idle" | "copied" | "failed"; url: string }>({ status: "idle", url: "" });
   async function copy() {
+    const url = `${window.location.origin}/api/mcp`;
     try {
-      await navigator.clipboard.writeText(`${window.location.origin}/api/mcp`);
-      setState("copied");
+      await navigator.clipboard.writeText(url);
+      setState({ status: "copied", url });
     } catch {
-      setState("failed");
+      setState({ status: "failed", url });
     }
   }
   return (
     <>
-      <button type="button" className="rs-plain" onClick={copy}>{state === "copied" ? "Copied" : "Copy endpoint URL"}</button>
-      <span className="rs-sr" role="status">{state === "copied" ? "Endpoint URL copied." : state === "failed" ? "The browser blocked clipboard access." : ""}</span>
+      <button type="button" className="rs-plain" onClick={copy}>{state.status === "copied" ? "Copied" : "Copy endpoint URL"}</button>
+      <p className="sc-copy-status" role="status">
+        {state.status === "copied" ? "Endpoint URL copied." : null}
+        {state.status === "failed" ? <>The browser blocked clipboard access. Select the URL and copy it by hand: <code className="sc-copy-url">{state.url}</code></> : null}
+      </p>
     </>
   );
 }
