@@ -2,7 +2,6 @@
 @import "./reader-shell.css";
 
 html, body { margin: 0; background: var(--rs-bg); }
-html { scroll-padding-top: 64px; }
 
 /* The MCP note under the index. */
 .sc-mcp { max-width: var(--rs-measure); margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--rs-line); font-size: 16px; line-height: 1.6; }
