@@ -1,6 +1,6 @@
 # 01 — Business process (As-Is / To-Be)
 
-portfolio-projects-showcase-web คือเว็บ Next.js ที่โชว์ตัวอย่างโปรเจกต์ 2 รายการ (placeholder จาก `data/projects.json`) ให้ผู้เยี่ยมชมค้นหา สลับมุมมอง All / Featured และเปิดดูรายละเอียด พร้อม endpoint `/api/mcp` แบบอ่านอย่างเดียวที่ให้ข้อมูลชุดเดียวกัน ไม่มีการแก้ไขหรือเก็บข้อมูลผู้ใช้
+portfolio-projects-showcase-web คือเว็บ Next.js ที่โชว์ตัวอย่างโปรเจกต์ 2 รายการ (placeholder จาก `data/projects.json`) ให้ผู้เยี่ยมชมค้นหาและสลับมุมมอง All / Featured เป็นรายการการ์ด (ไม่มีหน้ารายละเอียด) พร้อม endpoint `/api/mcp` แบบอ่านอย่างเดียวที่ให้ข้อมูลชุดเดียวกัน ไม่มีการแก้ไขหรือเก็บข้อมูลผู้ใช้
 
 Last reviewed: 2026-11-28 · commit `354e5ef`
 
@@ -13,11 +13,10 @@ flowchart LR
   PARSE --> DATA["PROJECTS from data/projects.json (2 sample records)"]
   DATA --> FILTER["filterProjects: name, description, tech within view"]
   FILTER --> PICK{"any match?"}
+  PICK -->|yes| CARDS["card list: every match with description and tech tags"]
   PICK -->|no| EMPTY["empty state: link back to /"]
-  PICK -->|yes| SEL["pickSelected: open study of chosen or first visible"]
-  SEL --> UI["ikebana-style stems, search form, All / Featured links"]
-  UI --> NAV["search or tab = plain GET navigation, state lives in URL"]
-  UI --> COPY["Copy endpoint: navigator.clipboard.writeText"]
+  PAGE --> TOOLBAR["search form and All / Featured links, always shown; plain GET navigation, state lives in URL"]
+  PAGE --> COPY["MCP section, always shown: Copy endpoint via navigator.clipboard.writeText"]
   COPY -->|"clipboard blocked"| SHOW["show URL to copy by hand"]
   AGENT["MCP client"] --> GET["GET /api/mcp: JSON catalog of 3 tools"]
   AGENT --> POST["POST /api/mcp JSON-RPC: initialize, tools/list, tools/call"]
@@ -31,8 +30,8 @@ Sources: `app/page.tsx`, `components/showcase-view.tsx`, `components/copy-endpoi
 
 - สองระเบียนเป็นข้อมูลตัวอย่าง ไม่ใช่รายการโปรเจกต์จริง (ของจริงอยู่ที่ portfolio-site-web); ไม่มี storage ไม่มีการแก้ไข
 - `POST /api/mcp` ตอบ status 400 กับทุก error รวมถึง method หรือ tool ที่ไม่รู้จัก และไม่มีการจัดการ notification แยก
-- Sentry ส่งเฉพาะ error เมื่อมี `NEXT_PUBLIC_SENTRY_DSN` ตั้งบน Vercel จริงหรือไม่ [ต้องยืนยัน]
-- การ deploy: `PRODUCT.md` (2026-10-23) ระบุว่า Git link ของ Vercel ยังชี้ repo เก่า ทำให้ push ไป main ไม่ deploy; สถานะวันนี้ [ต้องยืนยัน]
+- ไม่มีข้อมูลผู้ใช้ถูกเก็บ ยกเว้นรายงาน error ไป Sentry เมื่อมี `NEXT_PUBLIC_SENTRY_DSN` (`beforeSend` ลบ request, user, breadcrumbs, extra, ตัด query/hash ใน URL และข้อความ error, ไม่ส่ง performance transaction); ค่านี้ตั้งบน Vercel จริงหรือไม่ [ต้องยืนยัน]
+- CI (push/PR ไป main) กับ deploy เป็นคนละเส้นทาง CI ไม่ได้ trigger deploy; การ deploy: `PRODUCT.md` (2026-10-23) ระบุว่า Git link ของ Vercel ยังชี้ repo เก่า ทำให้ push ไป main ไม่ deploy; สถานะวันนี้ [ต้องยืนยัน]
 
 ## To-Be (ไม่มี)
 
